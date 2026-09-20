@@ -1,0 +1,60 @@
+# Workflow name
+name: Lab 1 - Node CI
+
+# Workflow triggers
+on:
+  workflow_dispatch:   # Manual trigger from GitHub Actions
+
+  push:
+    branches: [ main ] # Automatic trigger on push to main
+
+# List of jobs
+jobs:
+
+  # Main job
+  build-test:
+
+    # Runner used
+    runs-on: ubuntu-latest
+
+    # Job-level environment variables
+    env:
+      NODE_ENV: test
+      APP_NAME: demo-node-app
+
+    # Job steps
+    steps: 
+      # Get the repository code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Install and configure Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20   # Node.js version
+          cache: 'npm'       # Enable npm dependency cache
+
+         # cache: 'npm' sert à mettre en cache les dépendances 
+         # npm entre deux exécutions du workflow pour accélérer les runs suivants.
+      
+      # Install project dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Run tests and build the application
+      - name: Test and build
+        run: |
+          npm test
+          npm run build
+
+      # Print environment variables
+      - name: Print environment
+        run: echo "$APP_NAME tourne en mode $NODE_ENV"
+
+      # Upload the dist folder as an artifact
+      - name: Upload dist artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-files   # Artifact name
+          path: dist         # Folder to upload
