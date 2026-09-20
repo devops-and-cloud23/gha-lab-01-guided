@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "node app.js",
-    "test": "node -e \"if (2 + 3 !== 5) process.exit(1); console.log('Tests passed')\""
+    "test": "node -e \"if (2 + 3 !== 5) process.exit(1); console.log('Tests passed')\"",
+    "build": "mkdir -p dist && cp app.js dist/app.js"
   }
 }
